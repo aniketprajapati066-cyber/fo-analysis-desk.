@@ -1,119 +1,284 @@
+
 <!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#081426">
-<title>F&O Analysis Desk — V2</title>
+<title>F&O Analysis Desk — V3</title>
 <style>
-:root{--bg:#07111f;--panel:#101f33;--panel2:#142740;--line:#263b56;--text:#edf4ff;--muted:#9bb0ca;--blue:#55a7ff;--green:#35d39a;--red:#ff6b78;--amber:#ffc56b}
-*{box-sizing:border-box}body{margin:0;background:linear-gradient(180deg,#07111f,#0b1728);color:var(--text);font:15px system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
-header{padding:22px 16px 16px;background:#0a192b;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5}
-h1{font-size:22px;margin:0 0 5px}header p{margin:0;color:var(--muted);font-size:12px}
+:root{--bg:#07111f;--panel:#101f33;--line:#263b56;--text:#edf4ff;--muted:#9bb0ca;--blue:#55a7ff;--green:#35d39a;--red:#ff6b78;--amber:#ffc56b}
+*{box-sizing:border-box}
+body{margin:0;background:linear-gradient(180deg,#07111f,#0b1728);color:var(--text);font:15px system-ui,sans-serif}
+header{padding:20px 16px;background:#0a192b;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5}
+h1{font-size:22px;margin:0 0 5px}
+.tag{padding:4px 8px;border-radius:20px;background:#1b3653;color:#b9dcff;font-size:11px}
+header p{margin:0;color:var(--muted);font-size:12px}
 main{max-width:980px;margin:auto;padding:14px;display:grid;gap:14px}
 .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
 .card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:14px;min-width:0}
-.card h2{font-size:16px;margin:0 0 12px}.muted{color:var(--muted)}.small{font-size:12px}
-.metric{font-size:23px;font-weight:750;margin-top:4px}.tag{display:inline-block;padding:4px 8px;border-radius:20px;background:#1b3653;color:#b9dcff;font-size:11px}
+.card h2{font-size:16px;margin:0 0 12px}
+.muted{color:var(--muted)}.small{font-size:12px}
+.metric{font-size:23px;font-weight:750;margin-top:4px}
 label{display:block;color:var(--muted);font-size:12px;margin:9px 0 5px}
 input,select{width:100%;background:#09182a;border:1px solid #35506e;border-radius:9px;padding:11px;color:var(--text);font:inherit;min-width:0}
+input[type=checkbox]{width:auto;margin-right:7px}
 button{border:0;border-radius:10px;background:var(--blue);color:#061426;font-weight:750;padding:12px 14px;font:inherit;cursor:pointer}
 button.secondary{background:#213a57;color:var(--text);border:1px solid #3b5878}
-button:active{transform:scale(.99)}.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.result{background:#09182a;border:1px solid var(--line);border-radius:12px;padding:12px;margin-top:10px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.result{background:#09182a;border:1px solid var(--line);border-radius:12px;padding:12px;margin-top:10px;line-height:1.5}
 .green{color:var(--green)}.red{color:var(--red)}.amber{color:var(--amber)}
-table{width:100%;border-collapse:collapse;font-size:13px}td,th{padding:9px 5px;border-bottom:1px solid var(--line);text-align:left}th{color:var(--muted);font-weight:600}
+table{width:100%;border-collapse:collapse;font-size:12px}
+td,th{padding:8px 5px;border-bottom:1px solid var(--line);text-align:right}
+td:first-child,th:first-child{text-align:left}
+th{color:var(--muted)}
 .notice{border-left:3px solid var(--amber);padding:10px 12px;background:#2a2419;border-radius:8px;color:#ffe2b5;font-size:12px;line-height:1.5}
-.tabs{display:flex;gap:8px;overflow:auto;padding-bottom:2px}.tabs button{white-space:nowrap;padding:9px 12px}
 footer{color:var(--muted);font-size:11px;text-align:center;padding:10px 4px 24px}
-@media(min-width:720px){main{grid-template-columns:1fr 1fr}.wide{grid-column:1/-1}header{padding-left:max(16px,calc((100% - 948px)/2))}}
-@media(max-width:390px){.grid{grid-template-columns:1fr 1fr}.metric{font-size:20px}.card{padding:11px}}
+@media(min-width:720px){main{grid-template-columns:1fr 1fr}.wide{grid-column:1/-1}}
+@media(max-width:390px){.metric{font-size:20px}.card{padding:11px}.row{gap:8px}}
 </style>
 </head>
 <body>
-<header><h1>F&O Analysis Desk <span class="tag">VERSION 2</span></h1><p>Mobile-first NIFTY & BANKNIFTY trading study dashboard</p></header>
+
+<header>
+<h1>F&O Analysis Desk <span class="tag">VERSION 3</span></h1>
+<p>Mobile-first NIFTY & BANKNIFTY study dashboard • Manual verified data</p>
+</header>
+
 <main>
+
 <section class="grid wide">
- <div class="card"><div class="muted small">MARKET / UNDERLYING</div><div class="metric" id="underlyingName">NIFTY 50</div><div class="small muted">Enter verified prices below</div></div>
- <div class="card"><div class="muted small">TRADE RISK LIMIT</div><div class="metric">₹<span id="riskTop">1,000</span></div><div class="small muted">Your configured maximum loss</div></div>
+<div class="card">
+<div class="muted small">MARKET / UNDERLYING</div>
+<div class="metric" id="underlyingName">NIFTY 50</div>
+<div class="small muted">Manual data • not live</div>
+</div>
+<div class="card">
+<div class="muted small">MAXIMUM TRADE RISK</div>
+<div class="metric">₹<span id="riskTop">1,000</span></div>
+<div class="small muted">Editable risk cap</div>
+</div>
 </section>
+
 <section class="card wide">
- <h2>1. Market snapshot</h2>
- <div class="row"><div><label>Instrument</label><select id="instrument"><option>NIFTY 50</option><option>BANKNIFTY</option></select></div><div><label>Spot / futures price (₹)</label><input id="spot" type="number" value="25000" step="0.05"></div></div>
- <div class="row"><div><label>VWAP (₹)</label><input id="vwap" type="number" value="24980" step="0.05"></div><div><label>EMA 20 (₹)</label><input id="ema" type="number" value="24970" step="0.05"></div></div>
- <div class="row"><div><label>RSI (0–100)</label><input id="rsi" type="number" value="56" min="0" max="100"></div><div><label>Timeframe</label><select id="timeframe"><option>5-minute</option><option>15-minute</option><option>Daily</option></select></div></div>
- <button onclick="analyse()">Analyse trend</button>
- <div class="result" id="trendResult" aria-live="polite">Enter current values and tap Analyse trend. The preset values are examples, not live data.</div>
+<h2>1. Market snapshot & trend</h2>
+<div class="row">
+<div><label>Instrument</label>
+<select id="instrument">
+<option>NIFTY 50</option>
+<option>BANKNIFTY</option>
+</select></div>
+<div><label>Timeframe</label>
+<select id="timeframe">
+<option>5-minute</option>
+<option>15-minute</option>
+<option>Daily</option>
+</select></div>
+</div>
+<div class="row">
+<div><label>Spot / futures price (₹)</label><input id="spot" type="number" value="25000"></div>
+<div><label>VWAP (₹)</label><input id="vwap" type="number" value="24980"></div>
+</div>
+<div class="row">
+<div><label>EMA 20 (₹)</label><input id="ema" type="number" value="24970"></div>
+<div><label>RSI (0–100)</label><input id="rsi" type="number" value="56" min="0" max="100"></div>
+</div>
+<button onclick="analyse()">Analyse trend</button>
+<div class="result" id="trendResult">Enter verified chart values.</div>
 </section>
+
 <section class="card">
- <h2>2. Support & resistance</h2>
- <label>Support (₹)</label><input id="support" type="number" value="24900" step=".05">
- <label>Resistance (₹)</label><input id="resistance" type="number" value="25100" step=".05">
- <div class="result" id="srResult">Reference levels only. Confirm with your chart.</div>
+<h2>2. Support & resistance</h2>
+<label>Support (₹)</label>
+<input id="support" type="number" value="24900">
+<label>Resistance (₹)</label>
+<input id="resistance" type="number" value="25100">
+<button class="secondary" onclick="analyse()">Update levels</button>
+<div class="result" id="srResult">Enter chart levels.</div>
 </section>
+
 <section class="card">
- <h2>3. Option setup</h2>
- <div class="row"><div><label>Option type</label><select id="optType"><option>PE</option><option>CE</option></select></div><div><label>Strike price</label><input id="strike" type="number" value="25000" step="50"></div></div>
- <div class="row"><div><label>Premium per unit (₹)</label><input id="premium" type="number" value="100" step=".05"></div><div><label>Lot size (units)</label><input id="lot" type="number" value="65" min="1"></div></div>
- <label>Number of lots</label><input id="lots" type="number" value="1" min="1">
- <div class="result" id="optionResult">Estimated premium outlay: ₹6,500. Verify the actual lot size and premium with your broker.</div>
+<h2>3. Option-chain OI study</h2>
+<div class="row">
+<div><label>ATM / reference strike</label><input id="atm" type="number" value="25000"></div>
+<div><label>Expiry</label><input id="expiry" type="text" placeholder="Expiry date"></div>
+</div>
+<p class="small muted">Enter totals from your broker's option chain for the same expiry and strike range.</p>
+<div class="row">
+<div><label>Total CE OI</label><input id="ceoi" type="number" value="0" min="0"></div>
+<div><label>Total PE OI</label><input id="peoi" type="number" value="0" min="0"></div>
+</div>
+<div class="row">
+<div><label>CE change in OI</label><input id="cechg" type="number" value="0"></div>
+<div><label>PE change in OI</label><input id="pechg" type="number" value="0"></div>
+</div>
+<div class="row">
+<div><label>Highest CE OI strike</label><input id="cewall" type="number" value="25100"></div>
+<div><label>Highest PE OI strike</label><input id="pewall" type="number" value="24900"></div>
+</div>
+<button onclick="analyseOI()">Analyse option chain</button>
+<div class="result" id="oiResult">Enter option-chain values.</div>
 </section>
+
 <section class="card">
- <h2>4. Risk & position sizing</h2>
- <div class="row"><div><label>Maximum risk (₹)</label><input id="risk" type="number" value="1000" min="1"></div><div><label>Entry premium (₹)</label><input id="entry" type="number" value="100" step=".05"></div></div>
- <div class="row"><div><label>Stop-loss premium (₹)</label><input id="stop" type="number" value="85" step=".05"></div><div><label>Target premium (₹)</label><input id="target" type="number" value="130" step=".05"></div></div>
- <button onclick="calcRisk()">Calculate safe quantity</button>
- <div class="result" id="riskResult" aria-live="polite">Set your actual entry, stop and lot size to calculate.</div>
+<h2>4. CE / PE setup confirmation</h2>
+<div class="row">
+<div><label>Option side</label>
+<select id="side"><option>CE</option><option>PE</option></select></div>
+<div><label>Option strike</label><input id="strike" type="number" value="25000"></div>
+</div>
+<div class="row">
+<div><label>Option premium (₹)</label><input id="premium" type="number" value="100"></div>
+<div><label>Lot size (units)</label><input id="lot" type="number" value="65" min="1"></div>
+</div>
+<div class="row">
+<div><label>Chart breakout confirmed?</label>
+<select id="breakout"><option value="no">No</option><option value="yes">Yes</option></select></div>
+<div><label>OI supports direction?</label>
+<select id="oiConfirm"><option value="no">Not confirmed</option><option value="yes">Yes</option></select></div>
+</div>
+<button onclick="setupSignal()">Check setup</button>
+<div class="result" id="signalResult">Wait for price, trend and OI confirmation.</div>
 </section>
+
 <section class="card wide">
- <h2>5. Trade checklist</h2>
- <div id="checks">
- <label><input type="checkbox" class="check"> 15-minute trend and 5-minute entry agree</label>
- <label><input type="checkbox" class="check"> Price confirms VWAP / EMA direction</label>
- <label><input type="checkbox" class="check"> Support or resistance level is identified</label>
- <label><input type="checkbox" class="check"> Option-chain OI and change in OI reviewed</label>
- <label><input type="checkbox" class="check"> Stop-loss and quantity calculated before entry</label>
- <label><input type="checkbox" class="check"> No major event / abnormal spread overlooked</label>
- </div>
- <div class="result" id="checkCount">0 of 6 checks completed</div>
+<h2>5. Risk, stop-loss & position sizing</h2>
+<div class="row">
+<div><label>Maximum risk (₹)</label><input id="risk" type="number" value="1000" min="1"></div>
+<div><label>Entry premium (₹)</label><input id="entry" type="number" value="100"></div>
+</div>
+<div class="row">
+<div><label>Stop-loss premium (₹)</label><input id="stop" type="number" value="85"></div>
+<div><label>Target premium (₹)</label><input id="target" type="number" value="130"></div>
+</div>
+<div class="row">
+<div><label>Lot size (units)</label><input id="riskLot" type="number" value="65" min="1"></div>
+<div><label>Risk buffer (%)</label><input id="buffer" type="number" value="10" min="0" max="90"></div>
+</div>
+<button onclick="calcRisk()">Calculate quantity</button>
+<div class="result" id="riskResult">Enter actual premium, stop-loss and lot size.</div>
 </section>
+
 <section class="card wide">
- <h2>6. How to read the signals</h2>
- <table><tr><th>Condition</th><th>Possible interpretation</th></tr>
- <tr><td>Price above VWAP and EMA</td><td class="green">Bullish intraday bias, if sustained</td></tr>
- <tr><td>Price below VWAP and EMA</td><td class="red">Bearish intraday bias, if sustained</td></tr>
- <tr><td>RSI above 70 / below 30</td><td class="amber">Potentially stretched; not a standalone signal</td></tr>
- <tr><td>Breakout without volume / retest</td><td class="amber">Wait for confirmation; beware false break</td></tr></table>
+<h2>6. Trade checklist</h2>
+<div id="checks">
+<label><input type="checkbox" class="check"> 15-minute trend and 5-minute entry agree</label>
+<label><input type="checkbox" class="check"> Price is on the correct side of VWAP and EMA</label>
+<label><input type="checkbox" class="check"> Support / resistance breakout is confirmed</label>
+<label><input type="checkbox" class="check"> Option-chain OI reviewed</label>
+<label><input type="checkbox" class="check"> Stop-loss and quantity calculated</label>
+<label><input type="checkbox" class="check"> Spread, volatility and charges checked</label>
+</div>
+<div class="result" id="checkCount">0 of 6 checks completed</div>
 </section>
-<section class="notice wide"><b>Important:</b> This is an educational calculator, not a live market terminal or investment recommendation. Prices, indicators and option-chain values are manual inputs; preset values are illustrative. No broker or exchange feed is connected. Options can lose the full premium. Use verified live data, account for charges/slippage, and never exceed your risk limit.</section>
-<footer>F&O Analysis Desk V2 • Works in a mobile browser • Data is not live</footer>
+
+<section class="card wide">
+<h2>7. How to interpret the dashboard</h2>
+<table>
+<tr><th>Condition</th><th>Interpretation</th></tr>
+<tr><td>Price above VWAP & EMA</td><td class="green">Bullish bias</td></tr>
+<tr><td>Price below VWAP & EMA</td><td class="red">Bearish bias</td></tr>
+<tr><td>PCR rising with PE OI additions</td><td class="amber">Possible support clue</td></tr>
+<tr><td>CE OI concentrated above spot</td><td class="amber">Possible resistance clue</td></tr>
+<tr><td>RSI above 70 / below 30</td><td class="amber">Potentially stretched</td></tr>
+</table>
+</section>
+
+<section class="notice wide">
+<b>Important:</b> V3 does not connect to NSE, a broker, or a live data provider. All prices and OI values are manually entered. OI/PCR interpretations are clues, not predictions. Verify current contract lot size, expiry, spread, charges and slippage with your broker. Options can lose the entire premium. Never exceed your risk limit.
+</section>
+
+<footer>F&O Analysis Desk V3 • Mobile browser • Manual data only</footer>
 </main>
+
 <script>
-const $=id=>document.getElementById(id), num=id=>Number($(id).value);
-function fmt(n){return Math.round(n).toLocaleString('en-IN')}
+const $=id=>document.getElementById(id);
+const n=id=>Number($(id).value);
+const fmt=x=>Math.round(x).toLocaleString('en-IN');
+
 function analyse(){
- const s=num('spot'),v=num('vwap'),e=num('ema'),r=num('rsi'),sup=num('support'),res=num('resistance');
- $('underlyingName').textContent=$('instrument').value;
- let bias=s>v&&s>e?'Bullish bias':s<v&&s<e?'Bearish bias':'Mixed / sideways';
- let cls=bias.startsWith('Bull')?'green':bias.startsWith('Bear')?'red':'amber';
- let momentum=r>=70?'RSI is overbought territory.':r<=30?'RSI is oversold territory.':'RSI is between 30 and 70.';
- $('trendResult').innerHTML='<b class="'+cls+'">'+bias+'</b><br>'+momentum+' '+(s>res?'Price is above entered resistance.':s<sup?'Price is below entered support.':'Price is between entered levels.')+'<br><span class="muted small">Confirm on chart; this is a rule-based snapshot, not a prediction.</span>';
- $('srResult').textContent='Spot-to-support: ₹'+(s-sup).toFixed(2)+' • Resistance distance: ₹'+(res-s).toFixed(2);
+const s=n('spot'),v=n('vwap'),e=n('ema'),r=n('rsi'),sup=n('support'),res=n('resistance');
+$('underlyingName').textContent=$('instrument').value;
+
+if(![s,v,e,r,sup,res].every(Number.isFinite)||r<0||r>100||s<=0){
+$('trendResult').textContent='Enter valid prices and RSI from 0 to 100.';
+return;
 }
-function optionCalc(){
- const p=num('premium'),lot=num('lot'),lots=num('lots');
- $('optionResult').innerHTML='Estimated premium outlay: <b>₹'+fmt(p*lot*lots)+'</b><br>Premium risk if bought and held to expiry: up to the premium paid, before charges.';
+
+let bias=s>v&&s>e?'Bullish bias':s<v&&s<e?'Bearish bias':'Mixed / sideways';
+let cls=bias.startsWith('Bull')?'green':bias.startsWith('Bear')?'red':'amber';
+let momentum=r>=70?'RSI above 70.':r<=30?'RSI below 30.':'RSI between 30 and 70.';
+
+$('trendResult').innerHTML='<b class="'+cls+'">'+bias+'</b><br>'+momentum+' '+(s>res?'Price above resistance.':s<sup?'Price below support.':'Price between entered levels.')+'<br><span class="muted small">Confirm candle close, volume and retest.</span>';
+
+$('srResult').textContent='Distance from support: ₹'+(s-sup).toFixed(2)+' • Distance to resistance: ₹'+(res-s).toFixed(2);
 }
+
+function analyseOI(){
+const ce=n('ceoi'),pe=n('peoi'),cc=n('cechg'),pc=n('pechg'),cw=n('cewall'),pw=n('pewall');
+
+if(![ce,pe,cc,pc,cw,pw].every(Number.isFinite)||ce<0||pe<0||ce+pe===0){
+$('oiResult').textContent='Enter valid OI values. PCR requires non-zero total OI.';
+return;
+}
+
+const pcr=pe/ce;
+let tone=pcr>1.2?'Put OI is larger than Call OI (possible support clue).':pcr<0.8?'Call OI is larger than Put OI (possible resistance clue).':'PCR is near a balanced range.';
+
+$('oiResult').innerHTML='Put/Call OI ratio (PCR): <b>'+pcr.toFixed(2)+'</b><br>'+tone+'<br>CE change: <b>'+fmt(cc)+'</b> • PE change: <b>'+fmt(pc)+'</b><br>Highest CE OI strike: <b>'+cw+'</b> • Highest PE OI strike: <b>'+pw+'</b><br><span class="muted small">OI changes alone do not reveal whether positions are being bought or written.</span>';
+}
+
+function setupSignal(){
+const side=$('side').value,s=n('spot'),v=n('vwap'),e=n('ema'),r=n('rsi'),sup=n('support'),res=n('resistance');
+
+const trendOK=side==='CE'?(s>v&&s>e&&r>=50&&r<70):(s<v&&s<e&&r<=50&&r>30);
+const levelOK=side==='CE'?s>res:s<sup;
+const breakout=$('breakout').value==='yes';
+const oi=$('oiConfirm').value==='yes';
+const ok=trendOK&&levelOK&&breakout&&oi;
+
+$('signalResult').innerHTML=ok?
+'<b class="green">'+side+' checklist: all selected conditions pass.</b><br>Verify candle close, volume, spread and risk before any decision.':
+'<b class="amber">No confirmed '+side+' setup yet.</b><br>Trend: '+(trendOK?'pass':'not met')+' • Level: '+(levelOK?'pass':'not met')+' • Breakout: '+(breakout?'yes':'no')+' • OI: '+(oi?'yes':'no')+'. Wait rather than force a trade.';
+}
+
 function calcRisk(){
- const risk=num('risk'),entry=num('entry'),stop=num('stop'),target=num('target'),lot=num('lot');
- const loss=Math.abs(entry-stop)*lot, gain=Math.abs(target-entry)*lot;
- const allowed=loss>0?Math.floor(risk/loss):0;
- $('riskTop').textContent=fmt(risk);
- $('riskResult').innerHTML='Risk per lot at stop: <b>₹'+fmt(loss)+'</b><br>Maximum lots within risk budget: <b>'+allowed+'</b><br>Estimated reward:risk: <b>'+(loss>0?(gain/loss).toFixed(2):'—')+':1</b><br>'+(allowed<1?'<span class="red">One lot exceeds your risk limit. Skip or use a smaller-risk setup.</span>':'<span class="green">Calculated quantity is within the entered risk budget, before slippage and charges.</span>');
+const risk=n('risk'),entry=n('entry'),stop=n('stop'),target=n('target'),lot=n('riskLot'),buffer=n('buffer');
+
+if(![risk,entry,stop,target,lot,buffer].every(Number.isFinite)||risk<=0||entry<=0||stop<0||target<=0||lot<=0||buffer<0||buffer>=100||entry<=stop||target<=entry){
+$('riskResult').textContent='For a long option, enter risk > 0, entry > stop-loss, target > entry, valid lot size and buffer 0–99%.';
+return;
 }
+
+const riskPerUnit=entry-stop;
+const grossPerLot=riskPerUnit*lot;
+const effectiveBudget=risk*(1-buffer/100);
+const lots=Math.floor(effectiveBudget/grossPerLot);
+const qty=lots*lot;
+const loss=qty*riskPerUnit;
+const rr=(target-entry)/(entry-stop);
+
+$('riskTop').textContent=fmt(risk);
+
+$('riskResult').innerHTML=
+'Risk per lot: <b>₹'+fmt(grossPerLot)+'</b><br>'+
+'Budget after buffer: <b>₹'+fmt(effectiveBudget)+'</b><br>'+
+'Maximum lots: <b>'+lots+'</b> • Quantity: <b>'+qty+' units</b><br>'+
+'Estimated stop loss: <b>₹'+fmt(loss)+'</b> • Reward:risk: <b>'+rr.toFixed(2)+':1</b><br>'+
+(lots<1?
+'<span class="red">One lot exceeds the buffered risk budget. Skip this setup under the current limit.</span>':
+'<span class="green">Quantity fits the buffered estimate, but actual loss can exceed it due to gaps, slippage and charges.</span>');
+}
+
 ['instrument','spot','vwap','ema','rsi','timeframe','support','resistance'].forEach(id=>$(id).addEventListener('change',analyse));
-['premium','lot','lots'].forEach(id=>$(id).addEventListener('input',optionCalc));
-document.querySelectorAll('.check').forEach(c=>c.addEventListener('change',()=>{$('checkCount').textContent=document.querySelectorAll('.check:checked').length+' of 6 checks completed'}));
-analyse();optionCalc();calcRisk();
+
+document.querySelectorAll('.check').forEach(c=>c.addEventListener('change',()=>{
+$('checkCount').textContent=document.querySelectorAll('.check:checked').length+' of 6 checks completed';
+}));
+
+analyse();
+analyseOI();
+calcRisk();
 </script>
-</body></html>
+</body>
+</html>
